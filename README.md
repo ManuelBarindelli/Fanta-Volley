@@ -4,14 +4,9 @@ class Giocatore:
     def __init__(self, nome, ruolo):
         self.nome = nome
         self.ruolo = ruolo
-        self.voto = 0  # Voto iniziale del giocatore
-
-    def assegna_voto_automatico(self):
-        # Assegna un voto casuale tra 5.0 e 8.0
-        self.voto = round(random.uniform(5.0, 8.0), 1)
 
     def __str__(self):
-        return f"{self.nome} ({self.ruolo}) - Voto: {self.voto}"
+        return f"{self.nome} ({self.ruolo})"
 
 
 class Squadra:
@@ -21,13 +16,6 @@ class Squadra:
 
     def aggiungi_giocatore(self, giocatore):
         self.giocatori.append(giocatore)
-
-    def calcola_punteggio(self):
-        return sum([giocatore.voto for giocatore in self.giocatori])
-
-    def assegna_voti_giocatori(self):
-        for giocatore in self.giocatori:
-            giocatore.assegna_voto_automatico()
 
     def __str__(self):
         return f"{self.nome} - Giocatori: {', '.join([giocatore.nome for giocatore in self.giocatori])}"
@@ -39,21 +27,21 @@ class Partita:
         self.squadra2 = squadra2
 
     def gioca_partita(self):
-        # Assegna voti automatici ai giocatori delle due squadre
-        self.squadra1.assegna_voti_giocatori()
-        self.squadra2.assegna_voti_giocatori()
-
-        # Calcola i punteggi totali delle squadre
-        punteggio_squadra1 = self.squadra1.calcola_punteggio()
-        punteggio_squadra2 = self.squadra2.calcola_punteggio()
-
-        print(f"Punteggio {self.squadra1.nome}: {punteggio_squadra1}")
+        # Visualizza i giocatori delle due squadre
+        print(f"\nGiocatori di {self.squadra1.nome}:")
         for giocatore in self.squadra1.giocatori:
             print(giocatore)
 
-        print(f"\nPunteggio {self.squadra2.nome}: {punteggio_squadra2}")
+        print(f"\nGiocatori di {self.squadra2.nome}:")
         for giocatore in self.squadra2.giocatori:
             print(giocatore)
+
+        # Calcola punteggio casuale per ogni squadra
+        punteggio_squadra1 = random.randint(0, 5)
+        punteggio_squadra2 = random.randint(0, 5)
+
+        print(f"\nPunteggio finale {self.squadra1.nome}: {punteggio_squadra1}")
+        print(f"Punteggio finale {self.squadra2.nome}: {punteggio_squadra2}")
 
         # Determina il vincitore
         if punteggio_squadra1 > punteggio_squadra2:
@@ -68,16 +56,15 @@ class Partita:
 squadra1 = Squadra("Squadra A")
 squadra2 = Squadra("Squadra B")
 
-# Aggiunta di giocatori a Squadra A
-squadra1.aggiungi_giocatore(Giocatore("Giocatore A1", "Attaccante"))
-squadra1.aggiungi_giocatore(Giocatore("Giocatore A2", "Centrocampista"))
-squadra1.aggiungi_giocatore(Giocatore("Giocatore A3", "Difensore"))
+# Aggiunta di 9 giocatori a Squadra A
+for i in range(1, 10):
+    squadra1.aggiungi_giocatore(Giocatore(f"Giocatore A{i}", "Giocatore"))
 
-# Aggiunta di giocatori a Squadra B
-squadra2.aggiungi_giocatore(Giocatore("Giocatore B1", "Attaccante"))
-squadra2.aggiungi_giocatore(Giocatore("Giocatore B2", "Centrocampista"))
-squadra2.aggiungi_giocatore(Giocatore("Giocatore B3", "Difensore"))
+# Aggiunta di 8 giocatori a Squadra B
+for i in range(1, 9):
+    squadra2.aggiungi_giocatore(Giocatore(f"Giocatore B{i}", "Giocatore"))
 
 # Creazione e gestione della partita
 partita = Partita(squadra1, squadra2)
 partita.gioca_partita()
+
