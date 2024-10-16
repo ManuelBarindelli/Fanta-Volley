@@ -36,9 +36,17 @@ class Partita:
         for giocatore in self.squadra2.giocatori:
             print(giocatore)
 
-        # Calcola punteggio casuale per ogni squadra
-        punteggio_squadra1 = random.randint(0, 5)
-        punteggio_squadra2 = random.randint(0, 5)
+        # Calcola punteggio casuale per la squadra perdente tra 0 e 24
+        punteggio_perdente = random.randint(0, 24)
+        punteggio_vincente = 25
+
+        # Determina il vincitore
+        if punteggio_perdente % 2 == 0:  # Se il punteggio perdente è pari, squadra 1 vince
+            punteggio_squadra1 = punteggio_vincente
+            punteggio_squadra2 = punteggio_perdente
+        else:  # Altrimenti, squadra 2 vince
+            punteggio_squadra1 = punteggio_perdente
+            punteggio_squadra2 = punteggio_vincente
 
         print(f"\nPunteggio finale {self.squadra1.nome}: {punteggio_squadra1}")
         print(f"Punteggio finale {self.squadra2.nome}: {punteggio_squadra2}")
@@ -56,15 +64,19 @@ class Partita:
 squadra1 = Squadra("Squadra A")
 squadra2 = Squadra("Squadra B")
 
-# Aggiunta di 9 giocatori a Squadra A
-for i in range(1, 10):
-    squadra1.aggiungi_giocatore(Giocatore(f"Giocatore A{i}", "Giocatore"))
+# Definizione dei ruoli disponibili
+ruoli = ["Palleggiatore", "Centrale", "Schiacciatore", "Libero", "Opposto"]
 
-# Aggiunta di 8 giocatori a Squadra B
+# Aggiunta di 9 giocatori a Squadra A con ruoli casuali
+for i in range(1, 10):
+    ruolo = random.choice(ruoli)
+    squadra1.aggiungi_giocatore(Giocatore(f"Giocatore A{i}", ruolo))
+
+# Aggiunta di 8 giocatori a Squadra B con ruoli casuali
 for i in range(1, 9):
-    squadra2.aggiungi_giocatore(Giocatore(f"Giocatore B{i}", "Giocatore"))
+    ruolo = random.choice(ruoli)
+    squadra2.aggiungi_giocatore(Giocatore(f"Giocatore B{i}", ruolo))
 
 # Creazione e gestione della partita
 partita = Partita(squadra1, squadra2)
 partita.gioca_partita()
-
