@@ -10,6 +10,9 @@ class Giocatore:
         # Assegna un voto casuale tra 5.0 e 8.0
         self.voto = round(random.uniform(5.0, 8.0), 1)
 
+    def __str__(self):
+        return f"{self.nome} ({self.ruolo}) - Voto: {self.voto}"
+
 
 class Squadra:
     def __init__(self, nome):
@@ -20,12 +23,14 @@ class Squadra:
         self.giocatori.append(giocatore)
 
     def calcola_punteggio(self):
-        punteggio_totale = sum([giocatore.voto for giocatore in self.giocatori])
-        return punteggio_totale
+        return sum([giocatore.voto for giocatore in self.giocatori])
 
     def assegna_voti_giocatori(self):
         for giocatore in self.giocatori:
             giocatore.assegna_voto_automatico()
+
+    def __str__(self):
+        return f"{self.nome} - Giocatori: {', '.join([giocatore.nome for giocatore in self.giocatori])}"
 
 
 class Partita:
@@ -43,15 +48,20 @@ class Partita:
         punteggio_squadra2 = self.squadra2.calcola_punteggio()
 
         print(f"Punteggio {self.squadra1.nome}: {punteggio_squadra1}")
-        print(f"Punteggio {self.squadra2.nome}: {punteggio_squadra2}")
+        for giocatore in self.squadra1.giocatori:
+            print(giocatore)
+
+        print(f"\nPunteggio {self.squadra2.nome}: {punteggio_squadra2}")
+        for giocatore in self.squadra2.giocatori:
+            print(giocatore)
 
         # Determina il vincitore
         if punteggio_squadra1 > punteggio_squadra2:
-            print(f"{self.squadra1.nome} ha vinto!")
+            print(f"\n{self.squadra1.nome} ha vinto!")
         elif punteggio_squadra1 < punteggio_squadra2:
-            print(f"{self.squadra2.nome} ha vinto!")
+            print(f"\n{self.squadra2.nome} ha vinto!")
         else:
-            print("La partita è finita in pareggio.")
+            print("\nLa partita è finita in pareggio.")
 
 
 # Creazione delle squadre
