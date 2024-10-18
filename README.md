@@ -1,82 +1,104 @@
-import random
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partita tra Squadre</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .team {
+            margin-bottom: 20px;
+        }
+        .team h3 {
+            margin-bottom: 10px;
+        }
+        .team ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .team li {
+            margin: 5px 0;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Partita tra Squadre</h1>
 
-class Giocatore:
-    def __init__(self, nome, ruolo):
-        self.nome = nome
-        self.ruolo = ruolo
+    <div class="team" id="teamA">
+        <h3>Giocatori di Squadra A</h3>
+        <ul id="teamAList"></ul>
+    </div>
 
-    def __str__(self):
-        return f"{self.nome} ({self.ruolo})"
+    <div class="team" id="teamB">
+        <h3>Giocatori di Squadra B</h3>
+        <ul id="teamBList"></ul>
+    </div>
 
+    <button onclick="giocaPartita()">Gioca Partita</button>
 
-class Squadra:
-    def __init__(self, nome):
-        self.nome = nome
-        self.giocatori = []
+    <div class="result" id="result"></div>
 
-    def aggiungi_giocatore(self, giocatore):
-        self.giocatori.append(giocatore)
+    <script>
+        const ruoli = ["Palleggiatore", "Centrale", "Schiacciatore", "Libero", "Opposto"];
+        
+        function creaGiocatori(squadra, numeroGiocatori) {
+            const giocatori = [];
+            for (let i = 1; i <= numeroGiocatori; i++) {
+                const ruolo = ruoli[Math.floor(Math.random() * ruoli.length)];
+                giocatori.push(`Giocatore ${squadra}${i} (${ruolo})`);
+            }
+            return giocatori;
+        }
 
-    def __str__(self):
-        return f"{self.nome} - Giocatori: {', '.join([giocatore.nome for giocatore in self.giocatori])}"
+        function mostraGiocatori(idSquadra, giocatori) {
+            const ul = document.getElementById(idSquadra);
+            ul.innerHTML = '';
+            giocatori.forEach(giocatore => {
+                const li = document.createElement('li');
+                li.textContent = giocatore;
+                ul.appendChild(li);
+            });
+        }
 
+        function giocaPartita() {
+            const giocatoriA = creaGiocatori('A', 9);
+            const giocatoriB = creaGiocatori('B', 8);
 
-class Partita:
-    def __init__(self, squadra1, squadra2):
-        self.squadra1 = squadra1
-        self.squadra2 = squadra2
+            mostraGiocatori('teamAList', giocatoriA);
+            mostraGiocatori('teamBList', giocatoriB);
 
-    def gioca_partita(self):
-        # Visualizza i giocatori delle due squadre
-        print(f"\nGiocatori di {self.squadra1.nome}:")
-        for giocatore in self.squadra1.giocatori:
-            print(giocatore)
+            // Calcola il punteggio: la squadra vincitrice ottiene sempre 25 punti
+            let punteggioSquadraA, punteggioSquadraB;
+            const punteggioPerdente = Math.floor(Math.random() * 25); // Punteggio casuale per la squadra perdente
 
-        print(f"\nGiocatori di {self.squadra2.nome}:")
-        for giocatore in self.squadra2.giocatori:
-            print(giocatore)
+            if (punteggioPerdente % 2 === 0) {
+                punteggioSquadraA = 25;
+                punteggioSquadraB = punteggioPerdente;
+            } else {
+                punteggioSquadraA = punteggioPerdente;
+                punteggioSquadraB = 25;
+            }
 
-        # Calcola punteggio casuale per la squadra perdente tra 0 e 24
-        punteggio_perdente = random.randint(0, 24)
-        punteggio_vincente = 25
+            let risultato = `Punteggio finale Squadra A: ${punteggioSquadraA}<br>`;
+            risultato += `Punteggio finale Squadra B: ${punteggioSquadraB}<br>`;
 
-        # Determina il vincitore
-        if punteggio_perdente % 2 == 0:  # Se il punteggio perdente è pari, squadra 1 vince
-            punteggio_squadra1 = punteggio_vincente
-            punteggio_squadra2 = punteggio_perdente
-        else:  # Altrimenti, squadra 2 vince
-            punteggio_squadra1 = punteggio_perdente
-            punteggio_squadra2 = punteggio_vincente
+            if (punteggioSquadraA > punteggioSquadraB) {
+                risultato += "<br>Squadra A ha vinto!";
+            } else if (punteggioSquadraA < punteggioSquadraB) {
+                risultato += "<br>Squadra B ha vinto!";
+            } else {
+                risultato += "<br>La partita è finita in pareggio.";
+            }
 
-        print(f"\nPunteggio finale {self.squadra1.nome}: {punteggio_squadra1}")
-        print(f"Punteggio finale {self.squadra2.nome}: {punteggio_squadra2}")
-
-        # Determina il vincitore
-        if punteggio_squadra1 > punteggio_squadra2:
-            print(f"\n{self.squadra1.nome} ha vinto!")
-        elif punteggio_squadra1 < punteggio_squadra2:
-            print(f"\n{self.squadra2.nome} ha vinto!")
-        else:
-            print("\nLa partita è finita in pareggio.")
-
-
-# Creazione delle squadre
-squadra1 = Squadra("Squadra A")
-squadra2 = Squadra("Squadra B")
-
-# Definizione dei ruoli disponibili
-ruoli = ["Palleggiatore", "Centrale", "Schiacciatore", "Libero", "Opposto"]
-
-# Aggiunta di 9 giocatori a Squadra A con ruoli casuali
-for i in range(1, 10):
-    ruolo = random.choice(ruoli)
-    squadra1.aggiungi_giocatore(Giocatore(f"Giocatore A{i}", ruolo))
-
-# Aggiunta di 8 giocatori a Squadra B con ruoli casuali
-for i in range(1, 9):
-    ruolo = random.choice(ruoli)
-    squadra2.aggiungi_giocatore(Giocatore(f"Giocatore B{i}", ruolo))
-
-# Creazione e gestione della partita
-partita = Partita(squadra1, squadra2)
-partita.gioca_partita()
+            document.getElementById('result').innerHTML = risultato;
+        }
+    </script>
+</body>
+</html>
